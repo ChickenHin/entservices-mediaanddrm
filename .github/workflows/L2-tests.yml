@@ -13,8 +13,8 @@ env:
   THUNDER_TOOLS_COMMIT_SHA: "d5dd83c7c19c49c7f25c558c126500bd2d64f7a4"
   THUNDER_COMMIT_SHA: "2c0fcc5529e7da734be558ca6efa05d934dcce31"
   INTERFACES_REF: "develop"
-  AUTOMATICS_UNAME: ${{ secrets.AUTOMATICS_UNAME}}
-  AUTOMATICS_PASSCODE: ${{ secrets. AUTOMATICS_PASSCODE}}
+  # AUTOMATICS_UNAME: ${{ secrets.AUTOMATICS_UNAME}}
+  # AUTOMATICS_PASSCODE: ${{ secrets. AUTOMATICS_PASSCODE}}
 
 jobs:
   L2-tests:
@@ -23,7 +23,7 @@ jobs:
     strategy:
       matrix:
         compiler: [ gcc, clang ]
-        coverage: [ with-coverage, without-coverage ]
+        coverage: [ without-coverage ]
         exclude:
           - compiler: clang
             coverage: with-coverage
@@ -604,43 +604,43 @@ jobs:
           cp -rf $(pwd)/rdkL2TestResults.json $GITHUB_WORKSPACE/rdkL2TestResultsWithValgrind.json &&
           rm -rf $(pwd)/rdkL2TestResults.json
 
-      - name: Generate coverage
-        if: ${{ matrix.coverage == 'with-coverage' && !env.ACT && inputs.caller_source != 'testframework' }}
-        run: >
-          cp $GITHUB_WORKSPACE/entservices-testframework/Tests/L2Tests/.lcovrc_l2 ~/.lcovrc
-          &&
-          lcov -c
-          -o coverage.info
-          -d build/entservices-mediaanddrm
-          &&
-          lcov
-          -r coverage.info
-          '/usr/include/*'
-          '*/build/entservices-mediaanddrm/_deps/*'
-          '*/build/entservices-entservices-testframework/_deps/*'
-          '*/install/usr/include/*'
-          '*/Tests/headers/*'
-          '*/Tests/mocks/*'
-          '*/Tests/L2Tests/*'
-          '*/googlemock/*'
-          '*/googletest/*'
-          '*/sqlite/*'
-          '*/logger.cpp'
-          -o filtered_coverage.info
-          &&
-          genhtml
-          -o coverage
-          -t "entservices-mediaanddrm coverage"
-          filtered_coverage.info
+      # - name: Generate coverage
+      #   if: ${{ matrix.coverage == 'with-coverage' && !env.ACT && inputs.caller_source != 'testframework' }}
+      #   run: >
+      #     cp $GITHUB_WORKSPACE/entservices-testframework/Tests/L2Tests/.lcovrc_l2 ~/.lcovrc
+      #     &&
+      #     lcov -c
+      #     -o coverage.info
+      #     -d build/entservices-mediaanddrm
+      #     &&
+      #     lcov
+      #     -r coverage.info
+      #     '/usr/include/*'
+      #     '*/build/entservices-mediaanddrm/_deps/*'
+      #     '*/build/entservices-entservices-testframework/_deps/*'
+      #     '*/install/usr/include/*'
+      #     '*/Tests/headers/*'
+      #     '*/Tests/mocks/*'
+      #     '*/Tests/L2Tests/*'
+      #     '*/googlemock/*'
+      #     '*/googletest/*'
+      #     '*/sqlite/*'
+      #     '*/logger.cpp'
+      #     -o filtered_coverage.info
+      #     &&
+      #     genhtml
+      #     -o coverage
+      #     -t "entservices-mediaanddrm coverage"
+      #     filtered_coverage.info
 
-      - name: Upload artifacts
-        if: ${{ !env.ACT }}
-        uses: actions/upload-artifact@v4
-        with:
-          name: artifacts-L2-mediaanddrm
-          path: |
-            coverage/
-            valgrind_log
-            rdkL2TestResultsWithoutValgrind.json
-            rdkL2TestResultsWithValgrind.json
-          if-no-files-found: warn
+      # - name: Upload artifacts
+      #   if: ${{ !env.ACT }}
+      #   uses: actions/upload-artifact@v4
+      #   with:
+      #     name: artifacts-L2-mediaanddrm
+      #     path: |
+      #       coverage/
+      #       valgrind_log
+      #       rdkL2TestResultsWithoutValgrind.json
+      #       rdkL2TestResultsWithValgrind.json
+      #     if-no-files-found: warn
