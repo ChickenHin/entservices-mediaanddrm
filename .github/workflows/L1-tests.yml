@@ -25,7 +25,7 @@ jobs:
     strategy:
       matrix:
         compiler: [ gcc, clang ]
-        coverage: [ with-coverage, without-coverage ]
+        coverage: [ without-coverage ]
         exclude:
           - compiler: clang
             coverage: with-coverage
